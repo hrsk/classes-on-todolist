@@ -1,15 +1,17 @@
 import {FilterValues, Task} from "./App.tsx";
 import {Button} from "./Button.tsx";
+import {useRef} from "react";
 
 type Props = {
     title: string
     tasks: Task[]
     filter: FilterValues
     changeFilter: (filter: FilterValues) => void
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
+    addTask: (value: string) => void
 }
 
-export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter}: Props) => {
+export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask}: Props) => {
 
     let filteredTasks = tasks;
 
@@ -22,7 +24,7 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter}: P
 
     const tasksAfterMap = filteredTasks.map(task => {
 
-        const removeTaskHandler = (taskId: number) => {
+        const removeTaskHandler = (taskId: string) => {
             removeTask(taskId)
         }
 
@@ -34,12 +36,20 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter}: P
         )
     })
 
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const addTaskHandler = () => {
+        if (inputRef.current) {
+            addTask(inputRef.current.value)
+        }
+    }
+
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                <input ref={inputRef}/>
+                <button onClick={addTaskHandler}>+</button>
             </div>
             <ul style={{listStyle: 'none', padding: 0}}>
                 {
