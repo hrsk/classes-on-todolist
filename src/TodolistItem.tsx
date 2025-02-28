@@ -1,4 +1,5 @@
 import {Task} from "./App.tsx";
+import {Button} from "./Button.tsx";
 
 type Props = {
     title: string
@@ -30,9 +31,9 @@ export const TodolistItem = ({title, tasks}: Props) => {
                 }
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <Button onClick={() => console.log('All')}>All</Button>
+                <Button onClick={() => console.log('Active')}>Active</Button>
+                <Button onClick={() => console.log('Completed')}>Completed</Button>
             </div>
         </div>
     )
