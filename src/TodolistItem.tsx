@@ -1,6 +1,6 @@
 import {FilterValues, Task} from "./App.tsx";
 import {Button} from "./Button.tsx";
-import {useRef} from "react";
+import {ChangeEvent, useState, KeyboardEvent} from "react";
 
 type Props = {
     title: string
@@ -12,6 +12,8 @@ type Props = {
 }
 
 export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask}: Props) => {
+
+    const [value, setValue] = useState<string | undefined>('')
 
     let filteredTasks = tasks;
 
@@ -36,11 +38,21 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
         )
     })
 
-    const inputRef = useRef<HTMLInputElement>(null)
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(e.currentTarget.value)
+    }
 
     const addTaskHandler = () => {
-        if (inputRef.current) {
-            addTask(inputRef.current.value)
+        if (value) {
+            addTask(value)
+        }
+        setValue('')
+    }
+
+    const onKeyPressHandler = (e: KeyboardEvent) => {
+        const key = e.key
+        if (key === 'Enter' && e.metaKey) {
+            addTaskHandler()
         }
     }
 
@@ -48,7 +60,7 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
         <div>
             <h3>{title}</h3>
             <div>
-                <input ref={inputRef}/>
+                <input value={value} onChange={onChangeHandler} onKeyDown={onKeyPressHandler}/>
                 <button onClick={addTaskHandler}>+</button>
             </div>
             <ul style={{listStyle: 'none', padding: 0}}>
