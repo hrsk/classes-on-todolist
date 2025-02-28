@@ -9,9 +9,10 @@ type Props = {
     changeFilter: (filter: FilterValues) => void
     removeTask: (taskId: string) => void
     addTask: (value: string) => void
+    changeTaskStatus: (taskId: string, isDone: boolean) => void
 }
 
-export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask}: Props) => {
+export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask, changeTaskStatus}: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
 
@@ -26,14 +27,12 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
 
     const tasksAfterMap = filteredTasks.map(task => {
 
-        const removeTaskHandler = (taskId: string) => {
-            removeTask(taskId)
-        }
-
         return (
             <li key={task.id}>
-                <input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
-                <Button onClick={() => removeTaskHandler(task.id)}>x</Button>
+                <input type="checkbox" checked={task.isDone}
+                       onChange={(e) => changeTaskStatus(task.id, e.currentTarget.checked)}/>
+                <span>{task.title}</span>
+                <Button onClick={() => removeTask(task.id)}>x</Button>
             </li>
         )
     })
@@ -44,7 +43,10 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
 
     const addTaskHandler = () => {
         if (value) {
-            addTask(value)
+            const trimmedValue = value.trim()
+            if (trimmedValue !== '') {
+                addTask(trimmedValue)
+            }
         }
         setValue('')
     }
