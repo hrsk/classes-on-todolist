@@ -26,11 +26,12 @@ export const App = () => {
 
     const removeTask = (taskId: string) => {
         setTasks(tasks.filter(task => task.id !== taskId))
+        console.log('taskId:', taskId)
     }
 
     const changeFilter = (filter: FilterValues) => {
         setFilter(filter)
-        console.log(filter)
+        console.log('button:', filter)
     }
 
     const addTask = (value: string) => {

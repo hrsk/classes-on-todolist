@@ -15,6 +15,7 @@ type Props = {
 export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask, changeTaskStatus}: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
+    const [error, setError] = useState<string | null>(null)
 
     let filteredTasks = tasks;
 
@@ -28,7 +29,7 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
     const tasksAfterMap = filteredTasks.map(task => {
 
         return (
-            <li key={task.id}>
+            <li key={task.id} className={task.isDone ? 'isDone' : undefined}>
                 <input type="checkbox" checked={task.isDone}
                        onChange={(e) => changeTaskStatus(task.id, e.currentTarget.checked)}/>
                 <span>{task.title}</span>
@@ -39,6 +40,9 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
+        if (error !== null) {
+            setError(null)
+        }
     }
 
     const addTaskHandler = () => {
@@ -46,6 +50,8 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
             const trimmedValue = value.trim()
             if (trimmedValue !== '') {
                 addTask(trimmedValue)
+            } else {
+                setError('Title is required!')
             }
         }
         setValue('')
@@ -62,8 +68,10 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
         <div>
             <h3>{title}</h3>
             <div>
-                <input value={value} onChange={onChangeHandler} onKeyDown={onKeyPressHandler}/>
+                <input className={error ? 'isError' : undefined} value={value} onChange={onChangeHandler}
+                       onKeyDown={onKeyPressHandler}/>
                 <button onClick={addTaskHandler}>+</button>
+                {error && <span className={'errorMessage'} style={{display: 'block'}}>{error}</span>}
             </div>
             <ul style={{listStyle: 'none', padding: 0}}>
                 {
@@ -73,9 +81,9 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
                 }
             </ul>
             <div>
-                <Button onClick={() => changeFilter('All')}>All</Button>
-                <Button onClick={() => changeFilter('Active')}>Active</Button>
-                <Button onClick={() => changeFilter('Completed')}>Completed</Button>
+                <Button className={filter === 'All' ? 'isActive' : undefined} onClick={() => changeFilter('All')}>All</Button>
+                <Button className={filter === 'Active' ? 'isActive' : undefined} onClick={() => changeFilter('Active')}>Active</Button>
+                <Button className={filter === 'Completed' ? 'isActive' : undefined} onClick={() => changeFilter('Completed')}>Completed</Button>
             </div>
         </div>
     )

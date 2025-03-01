@@ -6,3 +6,19 @@
 .app > div {
   margin-right: 50px;
 }
+
+.isError {
+  border: crimson 1px solid;
+}
+
+.errorMessage {
+  color: crimson;
+}
+
+.isActive {
+  background-color: #5ba7ee;
+}
+
+.isDone {
+  opacity: 0.5;
+}
