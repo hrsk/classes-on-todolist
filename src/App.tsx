@@ -9,6 +9,8 @@ export type Task = {
     isDone: boolean
 }
 
+type Tasks = Record<string, Task[]>
+
 export type Todolist = {
     id: string
     title: string
@@ -19,22 +21,28 @@ export type FilterValues = 'All' | 'Active' | 'Completed'
 
 export const App = () => {
 
+    const todolistId1 = v1()
+    const todolistId2 = v1()
+
     const [todolists, setTodolists] = useState<Todolist[]>([
-        {id: v1(), title: 'What to learn', filter: 'All'},
-        {id: v1(), title: 'What to buy', filter: 'All'},
+        {id: todolistId1, title: 'What to learn', filter: 'All'},
+        {id: todolistId2, title: 'What to buy', filter: 'All'},
     ])
 
-    const [tasks, setTasks] = useState<Task[]>([
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'ReactJS', isDone: false},
-        {id: v1(), title: 'Redux', isDone: false},
-        {id: v1(), title: 'Typescript', isDone: false},
-        {id: v1(), title: 'RTK query', isDone: false},
-    ])
+    const [tasks, setTasks] = useState<Tasks>({
+        [todolistId1]: [
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'Redux', isDone: false},
+            {id: v1(), title: 'Typescript', isDone: false},
+            {id: v1(), title: 'RTK query', isDone: false},
+        ],
+        [todolistId2]: []
+    })
 
-    const removeTask = (taskId: string) => {
-        setTasks(tasks.filter(task => task.id !== taskId))
+    const removeTask = (todolistId: string, taskId: string) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].filter((task: Task) => task.id !== taskId)})
         console.log('taskId:', taskId)
     }
 
@@ -43,12 +51,18 @@ export const App = () => {
         console.log('button:', filter)
     }
 
-    const addTask = (value: string) => {
-        setTasks([...tasks, {id: v1(), title: value, isDone: false}])
+    const addTask = (todolistId: string, value: string) => {
+        setTasks({
+            ...tasks,
+            [todolistId]: [...tasks[todolistId], {id: v1(), title: value, isDone: false}]
+        })
     }
 
-    const changeTaskStatus = (taskId: string, isDone: boolean) => {
-        setTasks(tasks.map(task => task.id === taskId ? {...task, isDone} : task))
+    const changeTaskStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+        setTasks({
+            ...tasks,
+            [todolistId]: tasks[todolistId].map(task => task.id === taskId ? {...task, isDone} : task)
+        })
         console.log('taskId:', taskId)
         console.log('checked:', isDone)
     }
@@ -60,7 +74,7 @@ export const App = () => {
                     return (
                         <TodolistItem todolist={todolist}
                                       key={todolist.id}
-                                      tasks={tasks}
+                                      tasks={tasks[todolist.id]}
                                       changeFilter={changeFilter}
                                       removeTask={removeTask}
                                       addTask={addTask}

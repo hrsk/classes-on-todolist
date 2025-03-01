@@ -6,9 +6,9 @@ type Props = {
     todolist: Todolist
     tasks: Task[]
     changeFilter: (todolistId: string, filter: FilterValues) => void
-    removeTask: (taskId: string) => void
-    addTask: (value: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    removeTask: (todolistId: string, taskId: string) => void
+    addTask: (todolistId: string, value: string) => void
+    changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
 }
 
 export const TodolistItem = ({
@@ -37,9 +37,9 @@ export const TodolistItem = ({
         return (
             <li key={task.id} className={task.isDone ? 'isDone' : undefined}>
                 <input type="checkbox" checked={task.isDone}
-                       onChange={(e) => changeTaskStatus(task.id, e.currentTarget.checked)}/>
+                       onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}/>
                 <span>{task.title}</span>
-                <Button onClick={() => removeTask(task.id)}>x</Button>
+                <Button onClick={() => removeTask(todolistId, task.id)}>x</Button>
             </li>
         )
     })
@@ -55,7 +55,7 @@ export const TodolistItem = ({
         if (value) {
             const trimmedValue = value.trim()
             if (trimmedValue !== '') {
-                addTask(trimmedValue)
+                addTask(todolistId, trimmedValue)
             } else {
                 setError('Title is required!')
             }
