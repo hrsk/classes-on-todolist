@@ -9,6 +9,7 @@ type Props = {
     removeTask: (todolistId: string, taskId: string) => void
     addTask: (todolistId: string, value: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
+    removeTodolist: (todolistId: string) => void
 }
 
 export const TodolistItem = ({
@@ -17,7 +18,8 @@ export const TodolistItem = ({
                                  removeTask,
                                  changeFilter,
                                  addTask,
-                                 changeTaskStatus
+                                 changeTaskStatus,
+                                 removeTodolist
                              }: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
@@ -76,7 +78,10 @@ export const TodolistItem = ({
 
     return (
         <div>
-            <h3>{title}</h3>
+            <div className={'container'}>
+                <h3>{title}</h3>
+                <Button onClick={() => removeTodolist(todolistId)}>x</Button>
+            </div>
             <div>
                 <input className={error ? 'isError' : undefined} value={value} onChange={onChangeHandler}
                        onKeyDown={onKeyPressHandler}/>

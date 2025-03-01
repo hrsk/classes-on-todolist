@@ -67,6 +67,16 @@ export const App = () => {
         console.log('checked:', isDone)
     }
 
+    const removeTodolist = (todolistId: string) => {
+        setTodolists(todolists.filter(todolist => todolist.id !== todolistId))
+        delete tasks[todolistId]
+        setTasks({
+            ...tasks
+        })
+        console.log('todolists:', todolists)
+        console.log('tasks:', tasks)
+    }
+
     return (
         <div className="app">
             {
@@ -78,7 +88,8 @@ export const App = () => {
                                       changeFilter={changeFilter}
                                       removeTask={removeTask}
                                       addTask={addTask}
-                                      changeTaskStatus={changeTaskStatus}/>
+                                      changeTaskStatus={changeTaskStatus}
+                                      removeTodolist={removeTodolist}/>
                     )
                 })
             }
