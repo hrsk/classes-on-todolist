@@ -1,18 +1,24 @@
-import {FilterValues, Task} from "./App.tsx";
+import {FilterValues, Task, Todolist} from "./App.tsx";
 import {Button} from "./Button.tsx";
 import {ChangeEvent, useState, KeyboardEvent} from "react";
 
 type Props = {
-    title: string
+    todolist: Todolist
     tasks: Task[]
-    filter: FilterValues
-    changeFilter: (filter: FilterValues) => void
+    changeFilter: (todolistId: string, filter: FilterValues) => void
     removeTask: (taskId: string) => void
     addTask: (value: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean) => void
 }
 
-export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, addTask, changeTaskStatus}: Props) => {
+export const TodolistItem = ({
+                                 todolist: {id: todolistId, title, filter},
+                                 tasks,
+                                 removeTask,
+                                 changeFilter,
+                                 addTask,
+                                 changeTaskStatus
+                             }: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
     const [error, setError] = useState<string | null>(null)
@@ -64,6 +70,10 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
         }
     }
 
+    const changeFilterHandler = (filter: FilterValues) => {
+        changeFilter(todolistId, filter)
+    }
+
     return (
         <div>
             <h3>{title}</h3>
@@ -81,9 +91,12 @@ export const TodolistItem = ({title, tasks, removeTask, filter, changeFilter, ad
                 }
             </ul>
             <div>
-                <Button className={filter === 'All' ? 'isActive' : undefined} onClick={() => changeFilter('All')}>All</Button>
-                <Button className={filter === 'Active' ? 'isActive' : undefined} onClick={() => changeFilter('Active')}>Active</Button>
-                <Button className={filter === 'Completed' ? 'isActive' : undefined} onClick={() => changeFilter('Completed')}>Completed</Button>
+                <Button className={filter === 'All' ? 'isActive' : undefined}
+                        onClick={() => changeFilterHandler('All')}>All</Button>
+                <Button className={filter === 'Active' ? 'isActive' : undefined}
+                        onClick={() => changeFilterHandler('Active')}>Active</Button>
+                <Button className={filter === 'Completed' ? 'isActive' : undefined}
+                        onClick={() => changeFilterHandler('Completed')}>Completed</Button>
             </div>
         </div>
     )
