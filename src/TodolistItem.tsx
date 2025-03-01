@@ -10,6 +10,7 @@ type Props = {
     addTask: (todolistId: string, value: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
     removeTodolist: (todolistId: string) => void
+    changeTodolistTitle: (todolistId: string, value: string) => void
 }
 
 export const TodolistItem = ({
@@ -19,11 +20,14 @@ export const TodolistItem = ({
                                  changeFilter,
                                  addTask,
                                  changeTaskStatus,
-                                 removeTodolist
+                                 removeTodolist,
+                                 changeTodolistTitle,
                              }: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
     const [error, setError] = useState<string | null>(null)
+    const [titleValue, setTitleValue] = useState<string | undefined>('')
+    const [editMode, setEditMode] = useState<boolean>(false)
 
     let filteredTasks = tasks;
 
@@ -76,10 +80,44 @@ export const TodolistItem = ({
         changeFilter(todolistId, filter)
     }
 
+    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitleValue(e.currentTarget.value)
+    }
+
+    const changeTodolistTitleHandler = () => {
+        if (titleValue) {
+            changeTodolistTitle(todolistId, titleValue)
+        }
+    }
+
+    const activateEditMode = () => {
+        setEditMode(true)
+    }
+
+    const deactivateEditMode = () => {
+        changeTodolistTitleHandler()
+        setEditMode(false)
+    }
+
+    const onKeyPressEditModeHandler = (e: KeyboardEvent) => {
+        const {key} = e
+        if (e.metaKey && key === 'Enter') {
+            deactivateEditMode()
+        }
+    }
+
     return (
         <div>
             <div className={'container'}>
-                <h3>{title}</h3>
+                {
+                    !editMode
+                        ? <h3 onDoubleClick={activateEditMode}>{title}</h3>
+                        : <input type="text" value={titleValue}
+                                 onChange={onChangeTitleHandler}
+                                 onBlur={deactivateEditMode}
+                                 autoFocus={true}
+                                 onKeyDown={onKeyPressEditModeHandler}/>
+                }
                 <Button onClick={() => removeTodolist(todolistId)}>x</Button>
             </div>
             <div>

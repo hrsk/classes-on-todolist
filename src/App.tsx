@@ -80,6 +80,10 @@ export const App = () => {
         console.log('tasks:', tasks)
     }
 
+    const changeTodolistTitle = (todolistId: string, value: string) => {
+        setTodolists(todolists.map(todolist => todolist.id === todolistId ? {...todolist, title: value} : todolist))
+    }
+
     const createTodolist = (value: string) => {
         const todolistId = v1()
         setTodolists([...todolists, {id: todolistId, title: value, filter: 'All'}])
@@ -121,7 +125,8 @@ export const App = () => {
                                       removeTask={removeTask}
                                       addTask={addTask}
                                       changeTaskStatus={changeTaskStatus}
-                                      removeTodolist={removeTodolist}/>
+                                      removeTodolist={removeTodolist}
+                                      changeTodolistTitle={changeTodolistTitle}/>
                     )
                 })
             }
