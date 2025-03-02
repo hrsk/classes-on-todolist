@@ -8,6 +8,7 @@
 }
 
 .isError {
+  color: crimson;
   border: crimson 1px solid;
 }
 

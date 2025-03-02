@@ -1,12 +1,13 @@
-import {ChangeEvent, KeyboardEvent, useState} from "react";
+import {ChangeEvent, Fragment, JSX, KeyboardEvent, ReactNode, useState} from "react";
 import './App.css'
 
 type Props = {
     initialValue: string
     callback: (value: string) => void
+    render: (text: string, onDoubleClick: () => void) => JSX.Element
 }
 
-export const EditableSpan = ({initialValue, callback}: Props) => {
+export const EditableSpan = ({initialValue, callback, render}: Props) => {
 
     const [editMode, setEditMode] = useState(false)
     const [value, setValue] = useState<string | undefined>(() => initialValue)
@@ -59,11 +60,19 @@ export const EditableSpan = ({initialValue, callback}: Props) => {
                          onKeyDown={onKeyPressHandler}
                          onBlur={deactivateEditMode}
                          className={error ? 'isError' : undefined}/>
-                : <span onDoubleClick={activateEditMode}>{value}</span>
+                : <Children>{render(initialValue, () => activateEditMode())}</Children>
         }
             {
-                error && <span className={error ? 'errorMessage' : undefined}>{error}</span>
+                error && <span style={{display: "block"}} className={error ? 'errorMessage' : undefined}>{error}</span>
             }
         </div>
     )
+}
+
+type ChildrenProps = {
+    children: ReactNode
+}
+
+const Children = ({children}: ChildrenProps) => {
+    return <Fragment>{children}</Fragment>
 }
