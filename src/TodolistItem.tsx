@@ -41,12 +41,17 @@ export const TodolistItem = ({
 
     const tasksAfterMap = filteredTasks.map(task => {
 
+        const changeTaskTitleHandler = (value: string) => {
+            changeTaskTitle(todolistId, task.id, value)
+        }
+
         return (
-            <li style={{display: 'flex', alignItems: 'center'}} key={task.id} className={task.isDone ? 'isDone' : undefined}>
+            <li style={{display: 'flex', alignItems: 'center'}} key={task.id}
+                className={task.isDone ? 'isDone' : undefined}>
                 <input type="checkbox" checked={task.isDone}
                        onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}/>
                 <EditableSpan initialValue={task.title}
-                              callback={(value) => changeTaskTitle(todolistId, task.id, value)}
+                              callback={changeTaskTitleHandler}
                               render={(text, onDoubleClick) => <span onDoubleClick={onDoubleClick}>{text}</span>}/>
                 <Button onClick={() => removeTask(todolistId, task.id)}>x</Button>
             </li>
@@ -92,7 +97,7 @@ export const TodolistItem = ({
             <div className={'container'}>
                 <EditableSpan initialValue={title}
                               render={(text, onDoubleClick) => <h3 onDoubleClick={onDoubleClick}>{text}</h3>}
-                              callback={(value) => changeTodolistTitleHandler(value)}/>
+                              callback={changeTodolistTitleHandler}/>
                 <Button onClick={() => removeTodolist(todolistId)}>x</Button>
             </div>
             <div>
