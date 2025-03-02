@@ -12,6 +12,7 @@ type Props = {
     changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
     removeTodolist: (todolistId: string) => void
     changeTodolistTitle: (todolistId: string, value: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, value: string) => void
 }
 
 export const TodolistItem = ({
@@ -23,6 +24,7 @@ export const TodolistItem = ({
                                  changeTaskStatus,
                                  removeTodolist,
                                  changeTodolistTitle,
+                                 changeTaskTitle,
                              }: Props) => {
 
     const [value, setValue] = useState<string | undefined>('')
@@ -40,10 +42,12 @@ export const TodolistItem = ({
     const tasksAfterMap = filteredTasks.map(task => {
 
         return (
-            <li key={task.id} className={task.isDone ? 'isDone' : undefined}>
+            <li style={{display: 'flex', alignItems: 'center'}} key={task.id} className={task.isDone ? 'isDone' : undefined}>
                 <input type="checkbox" checked={task.isDone}
                        onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}/>
-                <span>{task.title}</span>
+                <EditableSpan initialValue={task.title}
+                              callback={(value) => changeTaskTitle(todolistId, task.id, value)}/>
+                {/*<span>{task.title}</span>*/}
                 <Button onClick={() => removeTask(todolistId, task.id)}>x</Button>
             </li>
         )
