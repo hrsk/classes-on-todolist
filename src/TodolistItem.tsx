@@ -1,6 +1,7 @@
 import {FilterValues, Task, Todolist} from "./App.tsx";
 import {Button} from "./Button.tsx";
 import {ChangeEvent, useState, KeyboardEvent} from "react";
+import {EditableSpan} from "./EditableSpan.tsx";
 
 type Props = {
     todolist: Todolist
@@ -26,8 +27,6 @@ export const TodolistItem = ({
 
     const [value, setValue] = useState<string | undefined>('')
     const [error, setError] = useState<string | null>(null)
-    const [titleValue, setTitleValue] = useState<string | undefined>('')
-    const [editMode, setEditMode] = useState<boolean>(false)
 
     let filteredTasks = tasks;
 
@@ -80,44 +79,15 @@ export const TodolistItem = ({
         changeFilter(todolistId, filter)
     }
 
-    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitleValue(e.currentTarget.value)
-    }
-
-    const changeTodolistTitleHandler = () => {
-        if (titleValue) {
-            changeTodolistTitle(todolistId, titleValue)
-        }
-    }
-
-    const activateEditMode = () => {
-        setEditMode(true)
-    }
-
-    const deactivateEditMode = () => {
-        changeTodolistTitleHandler()
-        setEditMode(false)
-    }
-
-    const onKeyPressEditModeHandler = (e: KeyboardEvent) => {
-        const {key} = e
-        if (e.metaKey && key === 'Enter') {
-            deactivateEditMode()
-        }
+    const changeTodolistTitleHandler = (value: string) => {
+        changeTodolistTitle(todolistId, value)
     }
 
     return (
         <div>
             <div className={'container'}>
-                {
-                    !editMode
-                        ? <h3 onDoubleClick={activateEditMode}>{title}</h3>
-                        : <input type="text" value={titleValue}
-                                 onChange={onChangeTitleHandler}
-                                 onBlur={deactivateEditMode}
-                                 autoFocus={true}
-                                 onKeyDown={onKeyPressEditModeHandler}/>
-                }
+                <EditableSpan initialValue={title}
+                              callback={(value) => changeTodolistTitleHandler(value)}/>
                 <Button onClick={() => removeTodolist(todolistId)}>x</Button>
             </div>
             <div>
