@@ -10,18 +10,16 @@ type Props = {
 export const EditableSpan = ({initialValue, callback, render}: Props) => {
 
     const [editMode, setEditMode] = useState(false)
-    const [value, setValue] = useState<string | undefined>(() => initialValue)
+    const [value, setValue] = useState<string>(() => initialValue)
     const [error, setError] = useState<string | null>(null)
 
     const callbackHandler = () => {
-        if (value) {
-            const trimmedValue = value.trim()
-            if (trimmedValue !== '') {
-                callback(trimmedValue)
-                setEditMode(false)
-            } else {
-                setError('Title is required!')
-            }
+        const trimmedValue = value.trim()
+        if (trimmedValue !== '') {
+            callback(trimmedValue)
+            setEditMode(false)
+        } else {
+            setError('Title is required!')
         }
         if (value === '') {
             setError('Title is required!')
@@ -29,7 +27,6 @@ export const EditableSpan = ({initialValue, callback, render}: Props) => {
     }
 
     const activateEditMode = () => {
-        setValue(initialValue)
         setEditMode(true)
     }
 
@@ -39,15 +36,15 @@ export const EditableSpan = ({initialValue, callback, render}: Props) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
-        if (error !== null) {
-            setError(null)
-        }
     }
 
     const onKeyPressHandler = (e: KeyboardEvent) => {
         const {key} = e
         if (key === 'Enter' && e.metaKey) {
             deactivateEditMode()
+        }
+        if (error !== null) {
+            setError(null)
         }
     }
 
@@ -60,7 +57,7 @@ export const EditableSpan = ({initialValue, callback, render}: Props) => {
                          onKeyDown={onKeyPressHandler}
                          onBlur={deactivateEditMode}
                          className={error ? 'isError' : undefined}/>
-                : <Children>{render(initialValue, () => activateEditMode())}</Children>
+                : <Children>{render(value, () => activateEditMode())}</Children>
         }
             {
                 error && <span style={{display: "block"}} className={error ? 'errorMessage' : undefined}>{error}</span>

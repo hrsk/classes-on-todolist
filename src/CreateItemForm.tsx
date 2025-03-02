@@ -6,7 +6,7 @@ type Props = {
 
 export const CreateItemForm = ({onCreateItem}: Props) => {
 
-    const [value, setValue] = useState<string | undefined>('')
+    const [value, setValue] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -14,21 +14,17 @@ export const CreateItemForm = ({onCreateItem}: Props) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
-        if (error !== null) {
-            setError(null)
-        }
     }
 
     const callbackHandler = () => {
-        if (value) {
-            const trimmedValue = value.trim()
-            if (trimmedValue !== '') {
-                onCreateItem(trimmedValue)
-            } else {
-                setError('Title is required!')
-                removeInputFocus()
-            }
+        const trimmedValue = value.trim()
+        if (trimmedValue !== '') {
+            onCreateItem(trimmedValue)
+        } else {
+            setError('Title is required!')
+            removeInputFocus()
         }
+
         if (value === '') {
             setError('Title is required!')
             removeInputFocus()
@@ -40,6 +36,9 @@ export const CreateItemForm = ({onCreateItem}: Props) => {
         const key = e.key
         if (key === 'Enter' && e.metaKey) {
             callbackHandler()
+        }
+        if (error !== null) {
+            setError(null)
         }
     }
 
