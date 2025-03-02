@@ -1,8 +1,8 @@
 import './App.css'
 import {TodolistItem} from "./TodolistItem.tsx";
-import {useState, KeyboardEvent, ChangeEvent} from "react";
+import {useState} from "react";
 import {v1} from "uuid";
-import {Button} from "./Button.tsx";
+import {CreateItemForm} from "./CreateItemForm.tsx";
 
 export type Task = {
     id: string
@@ -24,8 +24,6 @@ export const App = () => {
 
     const todolistId1 = v1()
     const todolistId2 = v1()
-
-    const [value, setValue] = useState<string | undefined>('')
 
     const [todolists, setTodolists] = useState<Todolist[]>([
         {id: todolistId1, title: 'What to learn', filter: 'All'},
@@ -97,31 +95,9 @@ export const App = () => {
         setTasks({...tasks, [todolistId]: []})
     }
 
-    const createTodolistHandler = () => {
-        if (value) {
-            createTodolist(value)
-        }
-        setValue('')
-    }
-
-    const onKeyPressHandler = (e: KeyboardEvent) => {
-        const {key} = e
-        if (key === 'Enter' && e.metaKey) {
-            createTodolistHandler()
-        }
-    }
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
-    }
-
     return (
         <div className="app">
-            <div>
-                <input type="text" value={value} onChange={onChangeHandler}
-                       onKeyDown={onKeyPressHandler}/>
-                <Button onClick={createTodolistHandler}>+</Button>
-            </div>
+            <CreateItemForm onCreateItem={createTodolist}/>
             {
                 todolists.map(todolist => {
                     return (
