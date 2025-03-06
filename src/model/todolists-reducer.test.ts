@@ -2,10 +2,10 @@ import {beforeEach, expect, test} from 'vitest'
 import {v1} from "uuid";
 import {Todolist} from "../App.tsx";
 import {
-    changeTodolistFilter,
-    changeTodolistTitle,
-    createTodolist,
-    removeTodolist,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    createTodolistAC,
+    removeTodolistAC,
     todolistsReducer,
 } from "./todolists-reducer.ts";
 
@@ -26,7 +26,7 @@ beforeEach(() => {
 
 test('correct todolist should be deleted', () => {
 
-    const action = removeTodolist({todolistId: todolistId1})
+    const action = removeTodolistAC({todolistId: todolistId1})
 
     const endState = todolistsReducer(startState, action)
 
@@ -43,7 +43,7 @@ test('correct todolist should be deleted', () => {
 test('correct todolist should be created', () => {
 
     const title = 'New todolist'
-    const endState = todolistsReducer(startState, createTodolist({title}))
+    const endState = todolistsReducer(startState, createTodolistAC({title}))
 
     expect(endState.length).toBe(3)
     expect(endState[2].title).toBe(title)
@@ -52,7 +52,7 @@ test('correct todolist should be created', () => {
 test('correct todolist should change its title', () => {
 
     const title = 'title has been changed'
-    const endState = todolistsReducer(startState, changeTodolistTitle({todolistId: todolistId1, title}))
+    const endState = todolistsReducer(startState, changeTodolistTitleAC({todolistId: todolistId1, title}))
 
     expect(endState.length).toBe(2)
     expect(endState[0].title).toBe(title)
@@ -63,7 +63,7 @@ test('correct todolist should change its title', () => {
 test('correct todolist should change its filter', () => {
 
     const filter = 'Completed'
-    const endState = todolistsReducer(startState, changeTodolistFilter({todolistId: todolistId1, filter}))
+    const endState = todolistsReducer(startState, changeTodolistFilterAC({todolistId: todolistId1, filter}))
 
     expect(endState.length).toBe(2)
     expect(endState[0].filter).toBe(filter)
