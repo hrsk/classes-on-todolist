@@ -8,8 +8,8 @@ import {
     removeTodolistAC
 } from "../model/todolists-reducer.ts";
 import {changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC} from "../model/tasks-reducer.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "./store.ts";
+import {useAppDispatch, useAppSelector} from "../common/hooks";
+import {tasksSelector, todolistsSelector} from "../model/selectors";
 
 export type Task = {
     id: string
@@ -29,9 +29,9 @@ export type FilterValues = 'All' | 'Active' | 'Completed'
 
 export const App = () => {
 
-    const todolists = useSelector<RootState, Todolist[]>(state => state.todolists)
-    const tasks = useSelector<RootState, Tasks>(state => state.tasks)
-    const dispatch = useDispatch()
+    const todolists = useAppSelector(todolistsSelector)
+    const tasks = useAppSelector(tasksSelector)
+    const dispatch = useAppDispatch()
 
     const removeTask = (todolistId: string, taskId: string) => {
         dispatch(deleteTaskAC({todolistId, taskId}))
