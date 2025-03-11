@@ -54,8 +54,7 @@ export const App = () => {
     }
 
     const removeTodolist = (todolistId: string) => {
-        const action = removeTodolistAC({todolistId})
-        dispatch(action)
+        dispatch(removeTodolistAC({todolistId}))
         console.log('todolists:', todolists)
         console.log('tasks:', tasks)
     }
@@ -69,8 +68,7 @@ export const App = () => {
     }
 
     const createTodolist = (value: string) => {
-        const action = createTodolistAC({title: value})
-        dispatch(action)
+        dispatch(createTodolistAC(value))
     }
 
     return (
