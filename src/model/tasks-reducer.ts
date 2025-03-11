@@ -1,4 +1,4 @@
-import {Tasks} from "../App.tsx";
+import {Tasks} from "../app/App.tsx";
 import {CreateTodolist, RemoveTodolist} from "./todolists-reducer.ts";
 import {v1} from "uuid";
 

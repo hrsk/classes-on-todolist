@@ -1,4 +1,4 @@
-import {FilterValues, Task, Todolist} from "./App.tsx";
+import {FilterValues, Task, Todolist} from "./app/App.tsx";
 import {Button} from "./Button.tsx";
 import {EditableSpan} from "./EditableSpan.tsx";
 import {CreateItemForm} from "./CreateItemForm.tsx";

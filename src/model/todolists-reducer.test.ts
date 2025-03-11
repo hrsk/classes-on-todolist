@@ -1,6 +1,6 @@
 import {beforeEach, expect, test} from 'vitest'
 import {v1} from "uuid";
-import {Todolist} from "../App.tsx";
+import {Todolist} from "../app/App.tsx";
 import {
     changeTodolistFilterAC,
     changeTodolistTitleAC,
