@@ -10,10 +10,11 @@ import {
 import {changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC} from "../model/tasks-reducer.ts";
 import {useAppDispatch, useAppSelector} from "../common/hooks";
 import {tasksSelector, todolistsSelector} from "../model/selectors";
-import ButtonAppBar from "../common/components/appBar/ButtonAppBar.tsx";
-import {Container, createTheme, CssBaseline, Grid2, Paper, ThemeProvider} from '@mui/material';
-import {useState} from "react";
-import {ThemeMode} from "../common/types";
+import {Header} from "../common/components/header/Header.tsx";
+import {Container, CssBaseline, Grid2, Paper, ThemeProvider} from '@mui/material';
+import {selectThemeMode} from "../app/app-selectors.ts";
+import {getTheme} from "../common/theme";
+
 
 export type Task = {
     id: string
@@ -36,7 +37,10 @@ export const App = () => {
     const todolists = useAppSelector(todolistsSelector)
     const tasks = useAppSelector(tasksSelector)
     const dispatch = useAppDispatch()
-    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+    // const themeMode = useAppSelector(appSelectors)
+
+    const theme = getTheme(useAppSelector(selectThemeMode))
+    // const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
     const removeTask = (todolistId: string, taskId: string) => {
         dispatch(deleteTaskAC({todolistId, taskId}))
@@ -76,25 +80,26 @@ export const App = () => {
         dispatch(createTodolistAC(value))
     }
 
-    const changeThemeMode = () => {
-        console.log('theme:', themeMode === 'light' ? 'dark' : 'light')
-        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
-    }
+    // const changeThemeMode = () => {
+    //     console.log('theme:', themeMode === 'light' ? 'dark' : 'light')
+    //     dispatch(switchAppTheme({themeMode: themeMode === 'light' ? 'dark' : 'light'}))
+    //     // setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+    // }
 
-    const theme = createTheme({
-        palette: {
-            mode: themeMode,
-            primary: {
-                main: '#087EA4',
-            },
-        },
-    })
+    // const theme = createTheme({
+    //     palette: {
+    //         mode: themeMode,
+    //         primary: {
+    //             main: '#087EA4',
+    //         },
+    //     },
+    // })
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <div className="app">
-                <ButtonAppBar changeThemeMode={changeThemeMode}/>
+                <Header/>
                 <Container maxWidth={'lg'}>
                     <Grid2 container sx={{mb: '30px'}}>
                         <CreateItemForm onCreateItem={createTodolist}/>
