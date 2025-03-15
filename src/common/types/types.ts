@@ -9,3 +9,5 @@ export type ResponseData<T = {}> = {
     messages: string[]
     resultCode: number
 }
+
+export type ThemeMode = 'light' | 'dark'

@@ -10,6 +10,10 @@ import {
 import {changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC} from "../model/tasks-reducer.ts";
 import {useAppDispatch, useAppSelector} from "../common/hooks";
 import {tasksSelector, todolistsSelector} from "../model/selectors";
+import ButtonAppBar from "../common/components/appBar/ButtonAppBar.tsx";
+import {Container, createTheme, CssBaseline, Grid2, Paper, ThemeProvider} from '@mui/material';
+import {useState} from "react";
+import {ThemeMode} from "../common/types";
 
 export type Task = {
     id: string
@@ -32,6 +36,7 @@ export const App = () => {
     const todolists = useAppSelector(todolistsSelector)
     const tasks = useAppSelector(tasksSelector)
     const dispatch = useAppDispatch()
+    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
     const removeTask = (todolistId: string, taskId: string) => {
         dispatch(deleteTaskAC({todolistId, taskId}))
@@ -71,25 +76,54 @@ export const App = () => {
         dispatch(createTodolistAC(value))
     }
 
+    const changeThemeMode = () => {
+        console.log('theme:', themeMode === 'light' ? 'dark' : 'light')
+        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
+    }
+
+    const theme = createTheme({
+        palette: {
+            mode: themeMode,
+            primary: {
+                main: '#087EA4',
+            },
+        },
+    })
+
     return (
-        <div className="app">
-            <CreateItemForm onCreateItem={createTodolist}/>
-            {
-                todolists.map(todolist => {
-                    return (
-                        <TodolistItem todolist={todolist}
-                                      key={todolist.id}
-                                      tasks={tasks[todolist.id]}
-                                      changeFilter={changeFilter}
-                                      removeTask={removeTask}
-                                      addTask={addTask}
-                                      changeTaskStatus={changeTaskStatus}
-                                      removeTodolist={removeTodolist}
-                                      changeTodolistTitle={changeTodolistTitle}
-                                      changeTaskTitle={changeTaskTitle}/>
-                    )
-                })
-            }
-        </div>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <div className="app">
+                <ButtonAppBar changeThemeMode={changeThemeMode}/>
+                <Container maxWidth={'lg'}>
+                    <Grid2 container sx={{mb: '30px'}}>
+                        <CreateItemForm onCreateItem={createTodolist}/>
+                    </Grid2>
+                    <Grid2 container spacing={4}>
+                        {
+                            todolists.map(todolist => {
+                                return (
+                                    <Grid2 key={todolist.id}>
+                                        <Paper sx={{p: '0 20px 20px 20px'}}>
+
+                                            <TodolistItem todolist={todolist}
+                                                          key={todolist.id}
+                                                          tasks={tasks[todolist.id]}
+                                                          changeFilter={changeFilter}
+                                                          removeTask={removeTask}
+                                                          addTask={addTask}
+                                                          changeTaskStatus={changeTaskStatus}
+                                                          removeTodolist={removeTodolist}
+                                                          changeTodolistTitle={changeTodolistTitle}
+                                                          changeTaskTitle={changeTaskTitle}/>
+                                        </Paper>
+                                    </Grid2>
+                                )
+                            })
+                        }
+                    </Grid2>
+                </Container>
+            </div>
+        </ThemeProvider>
     )
 }

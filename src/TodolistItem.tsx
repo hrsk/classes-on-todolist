@@ -1,7 +1,12 @@
 import {FilterValues, Task, Todolist} from "./app/App.tsx";
-import {Button} from "./common/components/button/Button.tsx";
 import {EditableSpan} from "./common/components/editable-span/EditableSpan.tsx";
 import {CreateItemForm} from "./common/components/create-item-form/CreateItemForm.tsx";
+import {DeleteButton} from "./common/components/button/DeleteButton.tsx";
+import {MaterialButton} from "./common/components/button/MaterialButton.ts";
+import {Checkbox, List, ListItem} from "@mui/material";
+import {ChangeEvent} from "react";
+import Box from "@mui/material/Box";
+import {containerSx, getListItemSx} from "./features/todolists/TodolistItem.styles.ts";
 
 type Props = {
     todolist: Todolist
@@ -42,16 +47,24 @@ export const TodolistItem = ({
             changeTaskTitle(todolistId, task.id, value)
         }
 
+        const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
+        }
+
         return (
-            <li style={{display: 'flex', alignItems: 'center'}} key={task.id}
-                className={task.isDone ? 'isDone' : undefined}>
-                <input type="checkbox" checked={task.isDone}
-                       onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}/>
-                <EditableSpan initialValue={task.title}
-                              callback={changeTaskTitleHandler}
-                              render={(text, onDoubleClick) => <span onDoubleClick={onDoubleClick}>{text}</span>}/>
-                <Button onClick={() => removeTask(todolistId, task.id)}>x</Button>
-            </li>
+            <ListItem sx={getListItemSx(task.isDone)} key={task.id}>
+                {/*className={task.isDone ? 'isDone' : undefined}>*/}
+                <Box sx={containerSx}>
+                    <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler}/>
+                    {/*<input type="checkbox" checked={task.isDone}*/}
+                    {/*       onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}/>*/}
+                    <EditableSpan initialValue={task.title}
+                                  callback={changeTaskTitleHandler}
+                                  render={(text, onDoubleClick) => <span onDoubleClick={onDoubleClick}>{text}</span>}/>
+                </Box>
+                <DeleteButton callback={() => removeTask(todolistId, task.id)}/>
+                {/*<Button onClick={() => removeTask(todolistId, task.id)}>x</Button>*/}
+            </ListItem>
         )
     })
 
@@ -69,28 +82,46 @@ export const TodolistItem = ({
 
     return (
         <div>
-            <div className={'container'}>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <EditableSpan initialValue={title}
                               render={(text, onDoubleClick) => <h3 onDoubleClick={onDoubleClick}>{text}</h3>}
                               callback={changeTodolistTitleHandler}/>
-                <Button onClick={() => removeTodolist(todolistId)}>x</Button>
-            </div>
+                <DeleteButton callback={() => removeTodolist(todolistId)}/>
+                {/*<Button onClick={() => removeTodolist(todolistId)}>x</Button>*/}
+            </Box>
             <CreateItemForm onCreateItem={addTaskHandler}/>
-            <ul style={{listStyle: 'none', padding: 0}}>
+            <List style={{listStyle: 'none', padding: 0}}>
                 {
                     !tasks.length
                         ? <span style={{color: 'crimson'}}>List is empty</span>
                         : tasksAfterMap
                 }
-            </ul>
-            <div>
-                <Button className={filter === 'All' ? 'isActive' : undefined}
-                        onClick={() => changeFilterHandler('All')}>All</Button>
-                <Button className={filter === 'Active' ? 'isActive' : undefined}
-                        onClick={() => changeFilterHandler('Active')}>Active</Button>
-                <Button className={filter === 'Completed' ? 'isActive' : undefined}
-                        onClick={() => changeFilterHandler('Completed')}>Completed</Button>
-            </div>
+            </List>
+            <Box sx={containerSx}>
+                <MaterialButton variant={filter === 'All' ? 'contained' : 'outlined'}
+                                color={'primary'}
+                                onClick={() => changeFilterHandler('All')}>
+                    All
+                </MaterialButton>
+                <MaterialButton variant={filter === 'Active' ? 'contained' : 'outlined'}
+                                color={'secondary'}
+                                onClick={() => changeFilterHandler('Active')}>
+                    Active
+                </MaterialButton>
+                <MaterialButton variant={filter === 'Completed' ? 'contained' : 'outlined'}
+                                color={'success'}
+                                onClick={() => changeFilterHandler('Completed')}>
+                    Completed
+                </MaterialButton>
+            </Box>
+            {/*<div>*/}
+            {/*    <Button className={filter === 'All' ? 'isActive' : undefined}*/}
+            {/*            onClick={() => changeFilterHandler('All')}>All</Button>*/}
+            {/*    <Button className={filter === 'Active' ? 'isActive' : undefined}*/}
+            {/*            onClick={() => changeFilterHandler('Active')}>Active</Button>*/}
+            {/*    <Button className={filter === 'Completed' ? 'isActive' : undefined}*/}
+            {/*            onClick={() => changeFilterHandler('Completed')}>Completed</Button>*/}
+            {/*</div>*/}
         </div>
     )
 }
