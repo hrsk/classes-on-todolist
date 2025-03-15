@@ -1,7 +1,7 @@
 import {FilterValues, Task, Todolist} from "./app/App.tsx";
-import {Button} from "./Button.tsx";
-import {EditableSpan} from "./EditableSpan.tsx";
-import {CreateItemForm} from "./CreateItemForm.tsx";
+import {Button} from "./common/components/button/Button.tsx";
+import {EditableSpan} from "./common/components/editable-span/EditableSpan.tsx";
+import {CreateItemForm} from "./common/components/create-item-form/CreateItemForm.tsx";
 
 type Props = {
     todolist: Todolist

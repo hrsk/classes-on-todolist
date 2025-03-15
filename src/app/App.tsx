@@ -1,6 +1,6 @@
 import './App.css'
 import {TodolistItem} from "../TodolistItem.tsx";
-import {CreateItemForm} from "../CreateItemForm.tsx";
+import {CreateItemForm} from "../common/components/create-item-form/CreateItemForm.tsx";
 import {
     changeTodolistFilterAC,
     changeTodolistTitleAC,

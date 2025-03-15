@@ -1,67 +1,33 @@
 import {ChangeEvent, CSSProperties, useEffect, useState} from "react";
-import {CreateItemForm} from "../CreateItemForm";
-import {EditableSpan} from "../EditableSpan.tsx";
-import {instanceAxios} from "../common";
+import {CreateItemForm, EditableSpan} from '../common/components'
+import {todolistsApi} from "../features/todolists/api";
+import {Todolist} from "../common/api";
 
 export const AppHttpRequests = () => {
 
     const [todolists, setTodolists] = useState<Todolist[]>([])
     const [tasks, setTasks] = useState<any>({})
 
-    const token = '459d1d3c-5bee-41b8-a461-4583f1701a88'
-    // const API_KEY = '60f832d0-b06e-4e32-a7fd-f271ef9cdfdd'
-
-    const BASE_URL = `https://social-network.samuraijs.com/api/1.1`
-
-
-    function getTodolists() {
-        fetch(`${BASE_URL}/todo-lists`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }).then(response => {
-            response.json()
-                .then(
-                    (data: Todolist[]) => {
-                        setTodolists(data)
-                    }
-                )
-        })
-    }
-
 
     useEffect(() => {
-        getTodolists()
-
-        // axios.get<Todolist[]>(`https://social-network.samuraijs.com/api/1.1/todo-lists`, {headers: {
-        //         Authorization: `Bearer ${token}`,
-        //     }}).then(
-        //     response => {
-        //         setTodolists(response.data)
-        //     }
-        // )
-        //
-
+        todolistsApi.getTodolists().then(
+            ({data}) => setTodolists(data)
+        )
     }, [])
 
     const createTodolist = (title: string) => {
-        instanceAxios.post<ResponseData<{ item: Todolist }>>(`/todo-lists`, {title}).then(response => {
-            setTodolists([response.data.data.item, ...todolists])
-            // console.log(response.data)
-        })
+        todolistsApi.createTodolist(title).then(
+            ({data}) => setTodolists([data.data.item, ...todolists]))
     }
 
     const deleteTodolist = (todolistId: string) => {
-        instanceAxios.delete<ResponseData>(`/todo-lists/${todolistId}`).then(
-            () => {
-                setTodolists(todolists.filter(td => td.id !== todolistId))
-            }
+        todolistsApi.deleteTodolist(todolistId).then(
+            () => setTodolists(todolists.filter(td => td.id !== todolistId))
         )
     }
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
-        instanceAxios.put<ResponseData>(`/todo-lists/${todolistId}`, {title}).then(
+        todolistsApi.changeTodolistTitle(todolistId, title).then(
             () => {
                 setTodolists(todolists.map(td => td.id === todolistId ? {...td, title} : td))
             }
@@ -121,23 +87,4 @@ const container: CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
-}
-
-type Todolist = {
-    id: string
-    addedDate: string
-    order: number
-    title: string
-}
-
-type FieldError = {
-    error: string
-    field: string
-}
-
-type ResponseData<T = {}> = {
-    data: T
-    fieldsErrors: FieldError[]
-    messages: string[]
-    resultCode: number
 }

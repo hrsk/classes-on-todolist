@@ -1,5 +1,5 @@
 import {ChangeEvent, Fragment, JSX, KeyboardEvent, ReactNode, useState} from "react";
-import './app/App.css'
+import '../../../app/App.css'
 
 type Props = {
     initialValue: string
