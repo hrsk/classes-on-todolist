@@ -1,1 +1,1 @@
-export type {Todolist} from './todolistsApi.types.ts'
+export type * from './todolistsApi.types.ts'

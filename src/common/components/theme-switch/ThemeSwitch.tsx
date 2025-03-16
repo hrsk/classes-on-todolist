@@ -5,7 +5,7 @@ type Props = {
     changeThemeMode: () => void
 }
 
-export function CustomizedSwitch({changeThemeMode}: Props) {
+export function ThemeSwitch({changeThemeMode}: Props) {
     return (
         <FormControlLabel
             onClick={changeThemeMode}

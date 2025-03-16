@@ -1,6 +1,5 @@
-import {instanceAxios} from "../../../common";
-import {Todolist} from "../../../common/api";
-import {ResponseData} from "../../../common/types";
+import {instanceAxios} from "@/common";
+import {Todolist, ResponseData} from "@/common/api";
 
 export const todolistsApi = {
     getTodolists() {

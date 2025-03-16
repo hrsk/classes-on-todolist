@@ -1,15 +1,15 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import {Container} from "@mui/material";
-import {containerSx} from "../../../features/todolists/TodolistItem.styles.ts";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
-import {CustomizedSwitch} from "../ThemeSwitch.tsx";
+import {ThemeSwitch} from "../theme-switch/ThemeSwitch.tsx";
 import {NavButton} from "../navButton/NavButton.ts";
 import {useAppDispatch, useAppSelector} from "../../hooks";
-import {switchAppTheme} from "../../../app/app-reducer.ts";
-import {selectThemeMode} from "../../../app/app-selectors.ts";
+import {containerSx} from "@/common/styles/container.styles.ts";
+import {selectThemeMode} from "@/app/app-selectors.ts";
+import {switchAppTheme} from "@/app/app-reducer.ts";
 
 
 export const Header = () => {
@@ -30,7 +30,7 @@ export const Header = () => {
                         <MenuIcon/>
                     </IconButton>
                     <Box>
-                        <CustomizedSwitch changeThemeMode={changeThemeMode}/>
+                        <ThemeSwitch changeThemeMode={changeThemeMode}/>
                         <NavButton color="inherit">Sign in</NavButton>
                         <NavButton color="inherit">Sign up</NavButton>
                         <NavButton color="inherit">Faq</NavButton>
